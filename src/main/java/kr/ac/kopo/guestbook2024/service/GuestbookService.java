@@ -9,9 +9,9 @@ public interface GuestbookService {
 
     // 글 등록 기능
     Long register(GuestbookDTO dto);
-
     // 한 페이지에 보여질 글 목록(GuestbookDTO 객체)이 저장된 list 정보를 갖고 있는 PageResultDTO 객체 참조값을 반환하는 기능
     PageResultDTO<GuestbookDTO, Guestbook> getList(PageRequestDTO requestDTO);
+    GuestbookDTO read(Long gno);
 
     default Guestbook dtoToEntity(GuestbookDTO dto) {
         Guestbook entity = Guestbook.builder()

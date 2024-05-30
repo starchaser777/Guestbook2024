@@ -91,6 +91,11 @@
   }
 }
 
+/* 추가한 CSS */
+.form-group {
+  margin: 10px;
+}
+
 body {
   margin: 0;
   font-family: var(--bs-body-font-family);

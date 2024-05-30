@@ -12,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
 import java.util.function.Function;
 
 @Service
@@ -22,7 +23,6 @@ public class GuestbookServiceImpl implements GuestbookService {
     private final GuestbookRepository repository; // final이 꼭 들어가야 함.
     @Override
     public Long register(GuestbookDTO dto) {
-
         Guestbook entity = dtoToEntity(dto);
         repository.save(entity);
 
@@ -38,5 +38,12 @@ public class GuestbookServiceImpl implements GuestbookService {
         Function<Guestbook, GuestbookDTO> fn = (entity -> entityToDto(entity));
 
         return new PageResultDTO<>(result, fn);
+    }
+
+    @Override
+    public GuestbookDTO read(Long gno) {
+        Optional<Guestbook> result = repository.findById(gno);
+
+        return result.isPresent()? entityToDto(result.get()): null;
     }
 }
