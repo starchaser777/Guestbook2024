@@ -7,6 +7,8 @@
 
         <h1 class="mt-4">GuestBook Modify Page</h1>
         <form action="/guestbook/modify" method="post">
+            <!-- 페이지 번호 -->
+            <input type="hidden" name="page" th:value="${requestDTO.page}">
             <div class="form-group">
                 <label>Gno</label>
                 <input type="text" class="form-control" name="gno" th:value="${dto.gno}" readonly>
@@ -25,32 +27,37 @@
             </div>
             <div class="form-group">
                 <label>RegDate:</label>
-                <input type="text" class="form-control" name="regDate" th:value="${#temporals.format(dto.regDate, 'yyyy/MM/dd HH:mm:ss')}" readonly>
+                <input type="text" class="form-control" name="regDate" th:value="${dto.regDate}" readonly>
             </div>
             <div class="form-group">
                 <label>ModDate:</label>
-                <input type="text" class="form-control" name="modDate" th:value="${#temporals.format(dto.modDate, 'yyyy/MM/dd HH:mm:ss')}" readonly>
+                <input type="text" class="form-control" name="modDate" th:value="${dto.modDate}" readonly>
             </div>
         </form>
 
-        <a th:href="@{/guestbook/modify(gno=${dto.gno}, page=${requestDTO.page})}">
-            <button type="button" class="btn btn-primary form-group">Modify</button></a>
-
+        <!-- 하이퍼링크로 하는 것은 GetMapping -->
+        <button type="button" class="btn btn-primary modifyBtn">Modify</button>
         <a th:href="@{/guestbook/list(page=${requestDTO.page})}">
             <button type="button" class="btn btn-info form-group">List</button></a>
         <!-- 하이퍼링크로 하는 것은 GetMapping -->
         <button type="button" class="btn btn-danger removeBtn">Remove</button>
-
-        <script th:inline="javascript">
-            let actionForm = $("form");
-            $(".removeBtn").click(function() {
-                actionForm
-                    .attr("action", "/guestbook/remove")
-                    .attr("method", "post");
-
-                actionForm.submit();
-            })
-        </script>
     </th:block>
 </th:block>
+
+<script th:inline="javascript">
+    let actionForm = $("form");
+    $(".removeBtn").click(function() {
+        actionForm
+            .attr("action", "/guestbook/remove")
+            .attr("method", "post")
+            .submit();
+    });
+
+    $(".modifyBtn").click(function() {
+        actionForm
+            .attr("action", "/guestbook/modify")
+            .attr("method", "post")
+            .submit();
+    })
+</script>
 </html>
