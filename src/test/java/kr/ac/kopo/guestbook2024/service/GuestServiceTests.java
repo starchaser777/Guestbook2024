@@ -50,4 +50,30 @@ public class GuestServiceTests {
             System.out.println(pageNum.intValue());
         }
     }
+
+    @Test
+    public void testSearchList() {
+        PageRequestDTO pageRequestDTO = PageRequestDTO.builder()
+                .page(25)
+                .size(10)
+                .type("tc") // 검색 조건
+                .keyword("7") // 검색 키워드
+                .build();
+
+        PageResultDTO<GuestbookDTO, Guestbook> resultDTO = service.getList(pageRequestDTO);
+        List<GuestbookDTO> list = resultDTO.getDtoList(); // 참조변수 선언 - 여러 번 사용할 경우
+
+        System.out.println("* start: " + resultDTO.getStart());
+        System.out.println("* end: " + resultDTO.getEnd());
+        System.out.println("* previous: " + resultDTO.isPrev());
+        System.out.println("* next: " + resultDTO.isNext());
+
+        for(GuestbookDTO guestbookDTO : list) {
+            System.out.println(guestbookDTO);
+        }
+
+        for(Integer pageNum : resultDTO.getPageList()) {
+            System.out.println(pageNum.intValue());
+        }
+    }
 }
