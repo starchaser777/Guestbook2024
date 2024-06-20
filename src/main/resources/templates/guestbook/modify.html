@@ -9,6 +9,8 @@
         <form action="/guestbook/modify" method="post">
             <!-- 페이지 번호 -->
             <input type="hidden" name="page" th:value="${requestDTO.page}">
+            <input type="hidden" name="type" th:value="${requestDTO.type}">
+            <input type="hidden" name="keyword" th:value="${requestDTO.keyword}">
             <div class="form-group">
                 <label>Gno</label>
                 <input type="text" class="form-control" name="gno" th:value="${dto.gno}" readonly>
@@ -37,8 +39,8 @@
 
         <!-- 하이퍼링크로 하는 것은 GetMapping -->
         <button type="button" class="btn btn-primary modifyBtn">Modify</button>
-        <a th:href="@{/guestbook/list(page=${requestDTO.page})}">
-            <button type="button" class="btn btn-info form-group">List</button></a>
+
+        <button type="button" class="btn btn-info form-group listBtn">List</button>
         <!-- 하이퍼링크로 하는 것은 GetMapping -->
         <button type="button" class="btn btn-danger removeBtn">Remove</button>
     </th:block>
@@ -57,6 +59,23 @@
         actionForm
             .attr("action", "/guestbook/modify")
             .attr("method", "post")
+            .submit();
+    })
+
+    $(".listBtn").click(function() {
+        var page = $("input[name='page']");
+        var type = $("input[name='type']");
+        var keyword = $("input[name='keyword']");
+
+        actionForm.empty();
+
+        actionForm.append(page);
+        actionForm.append(type);
+        actionForm.append(keyword);
+
+        actionForm
+            .attr("action", "/guestbook/list")
+            .attr("method", "get")
             .submit();
     })
 </script>

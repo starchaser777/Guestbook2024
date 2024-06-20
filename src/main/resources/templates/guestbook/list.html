@@ -16,6 +16,28 @@
                     </a>
                 </span>
             </h1>
+            <!-- 검색 타입과 검색어를 입력할 수 있는 화면 구성 -->
+            <form action="/guestbook/list" method="get" id="searchForm">
+                <div class="input-group">
+                    <input type="hidden" name="page" value="1">
+                    <div class="input-group-prepend">
+                        <select name="type" class="form-select">
+                            <option th:selected="${pageRequestDTO.type == null}">검색 종류가 선택되지 않음</option>
+                            <option value="t" th:selected="${pageRequestDTO.type == 't'}">제목</option>
+                            <option value="c" th:selected="${pageRequestDTO.type == 'c'}">내용</option>
+                            <option value="w" th:selected="${pageRequestDTO.type == 'w'}">작성자</option>
+                            <option value="tw" th:selected="${pageRequestDTO.type == 'tc'}">제목+내용</option>
+                            <option value="tcw" th:selected="${pageRequestDTO.type == 'tcw'}">제목+내용+작성자</option>
+                        </select>
+                    </div>
+                    <input class="form-control" type="text" name="keyword" th:value="${pageRequestDTO.keyword}">
+                    <div class="input-group-prepend">
+                        <button class="btn btn-outline-secondary btn-primary btn-search" type="button">Search</button>
+                        <button class="btn btn-outline-secondary btn-danger btn-cancel" type="button">Cancel</button>
+                    </div>
+                </div>
+            </form>
+            <!-- 검색 화면 구성 End -->
             <table class="table table-striped">
                 <thead>
                 <tr>
@@ -30,7 +52,7 @@
                 <tr th:each="dto : ${result.dtoList}">
                     <th scope="row">[[${dto.gno}]]</th>
                     <td>
-                        <a th:href="@{/guestbook/read(gno=${dto.gno}, page=${result.page})}">
+                        <a th:href="@{/guestbook/read(gno=${dto.gno}, page=${result.page}, type=${pageRequestDTO.type}, keyword=${pageRequestDTO.keyword})}">
                             [[${dto.title}]]
                         </a>
                     </td>
@@ -41,16 +63,16 @@
             </table>
             <ul class="pagination h-100 justify-content-center align-items-center">
                 <li class="page-item" th:if="${result.prev}">
-                    <a class="page-link" th:href="@{/guestbook/list(page = ${result.start - 1})}" tabindex="-1">Previous</a>
+                    <a class="page-link" th:href="@{/guestbook/list(page = ${result.start - 1}, type=${pageRequestDTO.type}, keyword=${pageRequestDTO.keyword})}" tabindex="-1">Previous</a>
                 </li>
 
                 <li th:class="'page-item ' + ${result.page == page?'active':''}" th:each="page: ${result.pageList}">
-                    <a class="page-link" th:href="@{/guestbook/list(page = ${page})}">[[${page}]]</a>
+                    <a class="page-link" th:href="@{/guestbook/list(page = ${page}, type=${pageRequestDTO.type}, keyword=${pageRequestDTO.keyword})}">[[${page}]]</a>
 
                 </li>
 
                 <li class="page-item" th:if="${result.next}">
-                    <a class="page-link" th:href="@{/guestbook/list(page = ${result.end + 1})}">Next</a>
+                    <a class="page-link" th:href="@{/guestbook/list(page = ${result.end + 1}, type=${pageRequestDTO.type}, keyword=${pageRequestDTO.keyword})}">Next</a>
                 </li>
             </ul>
         </th:block>
@@ -70,8 +92,8 @@
                     <p>Modal body text goes here.</p>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="$('.modal').hide()">Close</button>
                     <button type="button" class="btn btn-primary">Save changes</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="$('.modal').hide()">Close</button>
                 </div>
             </div>
         </div>
@@ -84,5 +106,14 @@
             $(".modal").show();
             // $(".modal").modal(); - 우리가 사용하는 버전에서는 modal() 메소드가 없어짐. 따라서 show()나 showModal() 사용.
         }
+
+        var form = $("#searchForm");
+        $(".btn-search").click(function (e) {
+            form.submit();
+        });
+        $(".btn-cancel").click(function (e) {
+            form.empty().submit();
+        });
+
     </script>
 </html>
